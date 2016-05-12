@@ -67,22 +67,19 @@
                 J(27)
             }
         },
-        wa = function (a, b) {
-            if (a) {
-                var c = M.createElement("script");
-                c.type = "text/javascript";
-                c.async = !0;
-                c.src = a;
-                b && (c.id = b);
-                var d = M.getElementsByTagName("script")[0];
-                d.parentNode.insertBefore(c, d)
-            }
+        f = /^[\w\-:/.?=&%!]+$/,
+        wa = function (a, b, c) {
+            a && (c ? (c = "", b && f.test(b) && (c = ' id="' + b + '"'), f.test(a) && M.write("<script" + c +
+                ' src="' + a + '">\x3c/script>')) : (c = M.createElement("script"), c.type =
+                "text/javascript", c.async = !0, c.src = a, b && (c.id = b), a = M.getElementsByTagName(
+                    "script")[0], a.parentNode.insertBefore(c, a)))
         },
         Ud = function () {
             return "https:" == M.location.protocol
         },
         xa = function () {
-            var a = "" + M.location.hostname;
+            var a =
+                "" + M.location.hostname;
             return 0 == a.indexOf("www.") ? a.substring(4) : a
         },
         ya = function (a) {
@@ -102,7 +99,8 @@
                 if ("object" === typeof b[e]) {
                     for (var g in b[e]) b[e].hasOwnProperty(g) && (c[g] = b[e][g]);
                     break
-                } else e < a.length && (c[a[e]] = b[e]);
+                } else e <
+                    a.length && (c[a[e]] = b[e]);
             return c
         };
     var ee = function () {
@@ -210,10 +208,14 @@
             return O.navigator.sendBeacon ? O.navigator.sendBeacon(a, b) ? (c(), !0) : !1 : !1
         },
         ge = function (a, b, c) {
-            1 <= 100 * Math.random() || Aa("?") || (a = ["t=error", "_e=" + a, "_v=j41", "sr=1"], b && a.push("_f=" +
+            1 <= 100 * Math.random() || Aa("?") || (a = ["t=error", "_e=" + a, "_v=j43", "sr=1"], b && a.push("_f=" +
                 b), c && a.push("_m=" + K(c.substring(0, 100))), a.push("aip=1"), a.push("z=" + hd()), wc(
                 oc() + "/collect", a.join("&"), ua))
         };
+    var h = function (a) {
+        var b = O.gaData = O.gaData || {};
+        return b[a] = b[a] || {}
+    };
     var Ha = function () {
         this.M = []
     };
@@ -272,12 +274,26 @@
                 e = e || ua;
             "image" == c ? wc(b, d, e) : "xhr" == c && wd(b, d, e) || "beacon" == c && x(b, d, e) || ba(b, d, e)
         } else ba(b, P(a, Ra), a.get(Ia));
+        b = a.get(Na);
+        b = h(b);
+        c = b.hitcount;
+        b.hitcount = c ? c + 1 : 1;
+        b = a.get(Na);
+        delete h(b).pending_experiments;
         a.set(Ia, ua, !0)
     }
 
     function Hc(a) {
-        var b = O.gaData;
-        b && (b.expId && a.set(Nc, b.expId), b.expVar && a.set(Oc, b.expVar))
+        (O.gaData = O.gaData || {}).expId && a.set(Nc, (O.gaData = O.gaData || {}).expId);
+        (O.gaData = O.gaData || {}).expVar && a.set(Oc, (O.gaData = O.gaData || {}).expVar);
+        var b;
+        var c = a.get(Na);
+        if (c = h(c).pending_experiments) {
+            var d = [];
+            for (b in c) c.hasOwnProperty(b) && c[b] && d.push(encodeURIComponent(b) + "." + encodeURIComponent(c[b]));
+            b = d.join("!")
+        } else b = void 0;
+        b && a.set(m, b, !0)
     }
 
     function cd() {
@@ -397,7 +413,6 @@
         db = function () {};
     var gb = qa(window.GoogleAnalyticsObject) && sa(window.GoogleAnalyticsObject) || "ga",
         Ba = !1,
-        he = S("_br"),
         hb = T("apiVersion", "v"),
         ib = T("clientVersion", "_v");
     S("anonymizeIp", "aip");
@@ -465,6 +480,7 @@
     S("exFatal", "exf");
     var Nc = S("expId", "xid"),
         Oc = S("expVar", "xvar"),
+        m = S("exp", "exp"),
         Rc = S("_utma", "_utma"),
         Sc = S("_utmz", "_utmz"),
         Tc = S("_utmht", "_utmht"),
@@ -513,6 +529,7 @@
         Ld = S("displayFeaturesTask"),
         V = T("name"),
         Q = T("clientId", "cid"),
+        n = T("clientIdTime"),
         Ad = S("userId", "uid"),
         Na = T("trackingId", "tid"),
         U = T("cookieName", void 0, "_ga"),
@@ -539,44 +556,20 @@
             }
         }
     };
-    var Od = function (a, b, c) {
+    var Od = function () {
             this.V = 1E4;
-            this.fa = a;
+            this.fa = void 0;
             this.$ = !1;
-            this.B = b;
-            this.ea = c || 1
+            this.ea = 1
         },
-        Ed = function (a, b) {
-            var c;
+        Ed = function () {
+            var a = new Od,
+                b;
             if (a.fa && a.$) return 0;
             a.$ = !0;
-            if (b) {
-                if (a.B && R(b, a.B)) return R(b, a.B);
-                if (0 == b.get(dc)) return 0
-            }
             if (0 == a.V) return 0;
-            void 0 === c && (c = Bd());
-            return 0 == c % a.V ? Math.floor(c / a.V) % a.ea + 1 : 0
-        };
-    var ie = new Od(!0, he, 7),
-        je = function (a) {
-            if (!Ud() && !Ba) {
-                var b = Ed(ie, a);
-                if (b && !(!O.navigator.sendBeacon && 4 <= b && 6 >= b)) {
-                    var c = (new Date).getHours(),
-                        d = [Bd(), Bd(), Bd()].join(".");
-                    a = (3 == b || 5 == b ? "https:" : "http:") + "//www.google-analytics.com/collect?z=br.";
-                    a += [b, "A", c, d].join(".");
-                    var e = 1 != b % 3 ? "https:" : "http:",
-                        e = e + "//www.google-analytics.com/collect?z=br.",
-                        e = e + [b, "B", c, d].join(".");
-                    7 == b && (e = e.replace("//www.", "//ssl."));
-                    c = function () {
-                        4 <= b && 6 >= b ? O.navigator.sendBeacon(e, "") : ta(e)
-                    };
-                    Bd() % 2 ? (ta(a), c()) : (c(), ta(a))
-                }
-            }
+            void 0 === b && (b = Bd());
+            return 0 == b % a.V ? Math.floor(b / a.V) % a.ea + 1 : 0
         };
 
     function fc() {
@@ -695,7 +688,7 @@
         },
         nd = function (a) {
             var b = Cc(P(a, Q)),
-                c = ic(P(a, W));
+                c = lc(P(a, W)).split(".").length;
             a = jc(P(a, Yb));
             1 < a && (c += "-" + a);
             return ["GA1", c, b].join(".")
@@ -706,13 +699,11 @@
                 l.H[c] == b ? d.push(l) : void 0 == g || l.H[c] < g ? (e = [l], g = l.H[c]) : l.H[c] == g && e.push(
                     l)
             }
-            return 0 < d.length ? d : e
+            return 0 <
+                d.length ? d : e
         },
         lc = function (a) {
             return 0 == a.indexOf(".") ? a.substr(1) : a
-        },
-        ic = function (a) {
-            return lc(a).split(".").length
         },
         kc = function (a) {
             if (!a) return "/";
@@ -849,6 +840,24 @@
             } else if (0 <= b.indexOf(a[c])) return !0;
         return !1
     };
+    var p = /^GTM-[A-Z0-9]+$/,
+        q = /;_gaexp=[^;]*/g,
+        r = /;((__utma=)|([^;=]+=GAX?\d+\.))[^;]*/g,
+        t = function (a) {
+            function b(a, b) {
+                b && (c += "&" + a + "=" + K(b))
+            }
+            var c = "https://www.google-analytics.com/gtm/js?id=" + K(a.id);
+            "dataLayer" != a.B && b("l", a.B);
+            b("t", a.target);
+            b("cid", a.ja);
+            b("cidt", a.ka);
+            b("gac", a.la);
+            b("aip", a.ia);
+            a.na && b("m", "sync");
+            b("cycle", a.G);
+            return c
+        };
     var Jd = function (a, b, c) {
             this.U = ed;
             this.aa = b;
@@ -968,8 +977,9 @@
             b(ec, a[ec]);
             b(ac, a[ac]);
             b(Ad, a[Ad]);
+            b(n, a[n]);
             b(hb, 1);
-            b(ib, "j41");
+            b(ib, "j43");
             c(Qb, Ma);
             c(dd, cd);
             c(Rb, Oa);
@@ -1016,9 +1026,9 @@
                         if (0 == c.length) J(12);
                         else {
                             J(14);
-                            d = ic(P(a, W));
-                            c = Gc(c,
-                                d, 0);
+                            d = lc(P(a,
+                                W)).split(".").length;
+                            c = Gc(c, d, 0);
                             if (1 == c.length) {
                                 c = c[0].s;
                                 break b
@@ -1039,9 +1049,8 @@
             if (e = (c = M.location[c ? "href" : "search"].match("(?:&|#|\\?)" + K("_ga").replace(
                     /([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1") + "=([^&#]*)")) && 2 == c.length ? c[1] : "") a.get(bc) ?
                 (c = e.indexOf("."), -1 == c ? J(22) : (d = e.substring(c + 1), "1" != e.substring(0, c) ? J(22) :
-                    (c = d.indexOf("."), -1 == c ? J(22) : (e =
-                        d.substring(0, c), c = d.substring(c + 1), e != Ic(c, 0) && e != Ic(c, -1) && e !=
-                        Ic(c, -2) ? J(23) : (J(11), a.data.set(Q, c)))))) : J(21);
+                    (c = d.indexOf("."), -1 == c ? J(22) : (e = d.substring(0, c), c = d.substring(c + 1), e !=
+                        Ic(c, 0) && e != Ic(c, -1) && e != Ic(c, -2) ? J(23) : (J(11), a.data.set(Q, c)))))) : J(21);
             b && (J(9), a.data.set(Q, K(b)));
             if (!a.get(Q))
                 if (c = (c = O.gaGlobal && O.gaGlobal.vid) && -1 != c.search(/^(?:utma\.)?\d+\.\d+$/) ? c : void 0)
@@ -1056,8 +1065,7 @@
             mc(a)
         },
         Kc = function (a) {
-            var b =
-                O.navigator,
+            var b = O.navigator,
                 c = O.screen,
                 d = M.location;
             a.set(lb, ya(a.get(ec)));
@@ -1075,8 +1083,7 @@
                 g && (ca = [e.clientWidth, e.clientHeight]);
             c = 0 >= ca[0] || 0 >= ca[1] ? "" : ca.join("x");
             a.set(rb, c);
-            a.set(tb,
-                fc());
+            a.set(tb, fc());
             a.set(ob, M.characterSet || M.charset);
             a.set(sb, b && "function" === typeof b.javaEnabled && b.javaEnabled() || !1);
             a.set(nb, (b && (b.language || b.browserLanguage) || "").toLowerCase());
@@ -1086,8 +1093,8 @@
                 for (c = 0; c < b.length; ++c)(D(b[c], "utm_id") || D(b[c], "utm_campaign") || D(b[c], "utm_source") ||
                     D(b[c], "utm_medium") || D(b[c], "utm_term") || D(b[c], "utm_content") || D(b[c], "gclid") ||
                     D(b[c], "dclid") || D(b[c], "gclsrc")) && d.push(b[c]);
-                0 < d.length && (b = "#" + d.join("&"), a.set(kb, a.get(kb) +
-                    b))
+                0 < d.length && (b = "#" + d.join("&"),
+                    a.set(kb, a.get(kb) + b))
             }
         };
     pc.prototype.get = function (a) {
@@ -1108,14 +1115,36 @@
             "string" === typeof arguments[0] ? (b = arguments[0], c = [].slice.call(arguments, 1)) : (b =
                 arguments[0] && arguments[0][Va], c = arguments);
             b && (c = za(qc[b] || [], c), c[Va] = b, this.b.set(c, void 0, !0), this.filters.D(this.b), this.b.data
-                .m = {}, je(this.b))
+                .m = {})
         }
     };
-    var rc = function (a) {
-        if ("prerender" == M.visibilityState) return !1;
-        a();
-        return !0
+    pc.prototype.ma = function (a, b) {
+        var c = this;
+        u(a, c, b) || (v(a, function () {
+            u(a, c, b)
+        }), y(String(c.get(V)), a, void 0, b, !0))
     };
+    var rc = function (a) {
+            if ("prerender" == M.visibilityState) return !1;
+            a();
+            return !0
+        },
+        z = function (a) {
+            if (!rc(a)) {
+                J(16);
+                var b = !1,
+                    c = function () {
+                        if (!b && rc(a)) {
+                            b = !0;
+                            var d = c,
+                                e = M;
+                            e.removeEventListener ? e.removeEventListener("visibilitychange", d, !1) : e.detachEvent &&
+                                e.detachEvent("onvisibilitychange", d)
+                        }
+                    };
+                L(M, "visibilitychange", c)
+            }
+        };
     var td = /^(?:(\w+)\.)?(?:(\w+):)?(\w+)$/,
         sc = function (a) {
             if (ea(a[0])) this.u = a[0];
@@ -1139,43 +1168,109 @@
     function ud(a) {
         return 0 <= a.indexOf(".") || 0 <= a.indexOf(":")
     };
-    var Yd, Zd, $d;
+    var Yd, Zd, $d, A;
     Yd = new ee;
     $d = new ee;
+    A = new ee;
     Zd = {
         ec: 45,
         ecommerce: 46,
         linkid: 47
     };
-    var ae = function (a) {
-        function b(a) {
-            var b = (a.hostname || "").split(":")[0].toLowerCase(),
-                c = (a.protocol || "").toLowerCase(),
-                c = 1 * a.port || ("http:" == c ? 80 : "https:" == c ? 443 : "");
-            a = a.pathname || "";
-            D(a, "/") || (a = "/" + a);
-            return [b, "" + c, a]
-        }
-        var c = M.createElement("a");
-        c.href = M.location.href;
-        var d = (c.protocol || "").toLowerCase(),
-            e = b(c),
-            g = c.search || "",
-            ca = d + "//" + e[0] + (e[1] ? ":" + e[1] : "");
-        D(a, "//") ? a = d + a : D(a, "/") ? a = ca + a : !a || D(a, "?") ? a = ca + e[2] + (a || g) : 0 > a.split(
-            "/")[0].indexOf(":") && (a = ca + e[2].substring(0, e[2].lastIndexOf("/")) +
-            "/" + a);
-        c.href = a;
-        d = b(c);
-        return {
-            protocol: (c.protocol || "").toLowerCase(),
-            host: d[0],
-            port: d[1],
-            path: d[2],
-            query: c.search || "",
-            url: a || ""
-        }
-    };
+    var u = function (a, b, c) {
+            b == N || b.get(V);
+            var d = Yd.get(a);
+            if (!ea(d)) return !1;
+            b.plugins_ = b.plugins_ || new ee;
+            if (b.plugins_.get(a)) return !0;
+            b.plugins_.set(a, new d(b, c || {}));
+            return !0
+        },
+        y = function (a, b, c, d, e) {
+            if (!ea(Yd.get(b)) && !$d.get(b)) {
+                Zd.hasOwnProperty(b) && J(Zd[b]);
+                if (p.test(b)) {
+                    J(52);
+                    a = N.j(a);
+                    if (!a) return !0;
+                    c = d || {};
+                    d = {
+                        id: b,
+                        B: c.dataLayer || "dataLayer",
+                        ia: !!a.get("anonymizeIp"),
+                        na: e,
+                        G: !1
+                    };
+                    a.get("&gtm") == b && (d.G = !0);
+                    var g = String(a.get("name"));
+                    "t0" != g && (d.target = g);
+                    Aa(String(a.get("trackingId"))) || (d.ja = String(a.get(Q)),
+                        d.ka = Number(a.get(n)), a = c.palindrome ? r : q, a = (a = M.cookie.replace(/^|(; +)/g,
+                            ";").match(a)) ? a.sort().join("").substring(1) : void 0, d.la = a);
+                    a = d.B;
+                    c = (new Date).getTime();
+                    O[a] = O[a] || [];
+                    c = {
+                        "gtm.start": c
+                    };
+                    e || (c.event = "gtm.js");
+                    O[a].push(c);
+                    c = t(d)
+                }!c && Zd.hasOwnProperty(b) ? (J(39), c = b + ".js") : J(43);
+                c && (c && 0 <= c.indexOf("/") || (c = (Ba || Ud() ? "https:" : "http:") +
+                        "//www.google-analytics.com/plugins/ua/" + c), d = ae(c), a = d.protocol, c = M.location
+                    .protocol, ("https:" == a || a == c || ("http:" != a ? 0 : "http:" == c)) && B(d) && (wa(d.url,
+                        void 0,
+                        e), $d.set(b, !0)))
+            }
+        },
+        v = function (a, b) {
+            var c = A.get(a) || [];
+            c.push(b);
+            A.set(a, c)
+        },
+        C = function (a, b) {
+            Yd.set(a, b);
+            for (var c = A.get(a) || [], d = 0; d < c.length; d++) c[d]();
+            A.set(a, [])
+        },
+        B = function (a) {
+            var b = ae(M.location.href);
+            if (D(a.url, "https://www.google-analytics.com/gtm/js?id=")) return !0;
+            if (a.query || 0 <= a.url.indexOf("?") || 0 <= a.path.indexOf("://")) return !1;
+            if (a.host == b.host && a.port == b.port) return !0;
+            b = "http:" == a.protocol ? 80 : 443;
+            return "www.google-analytics.com" == a.host && (a.port || b) == b && D(a.path, "/plugins/") ? !0 : !1
+        },
+        ae = function (a) {
+            function b(a) {
+                var b = (a.hostname || "").split(":")[0].toLowerCase(),
+                    c = (a.protocol || "").toLowerCase(),
+                    c = 1 * a.port || ("http:" == c ? 80 : "https:" == c ? 443 : "");
+                a = a.pathname || "";
+                D(a, "/") || (a = "/" + a);
+                return [b, "" + c, a]
+            }
+            var c = M.createElement("a");
+            c.href = M.location.href;
+            var d = (c.protocol || "").toLowerCase(),
+                e = b(c),
+                g = c.search || "",
+                ca = d + "//" + e[0] + (e[1] ? ":" + e[1] : "");
+            D(a, "//") ? a = d + a : D(a, "/") ? a = ca + a : !a || D(a, "?") ? a = ca + e[2] + (a || g) : 0 > a.split(
+                "/")[0].indexOf(":") && (a = ca + e[2].substring(0, e[2].lastIndexOf("/")) + "/" +
+                a);
+            c.href = a;
+            d = b(c);
+            return {
+                protocol: (c.protocol || "").toLowerCase(),
+                host: d[0],
+                port: d[1],
+                path: d[2],
+                query: c.search || "",
+                url: a || ""
+            }
+        };
     var Z = {
         ga: function () {
             Z.f = []
@@ -1191,44 +1286,8 @@
     Z.J = function (a) {
         for (var b = [], c = 0; c < arguments.length; c++) try {
             var d = new sc(arguments[c]);
-            if (d.g) Yd.set(d.a[0], d.a[1]);
-            else {
-                if (d.i) {
-                    var e = d,
-                        g = e.a[0];
-                    if (!ea(Yd.get(g)) && !$d.get(g)) {
-                        Zd.hasOwnProperty(g) && J(Zd[g]);
-                        var ca = e.X;
-                        !ca && Zd.hasOwnProperty(g) ? (J(39), ca = g + ".js") : J(43);
-                        if (ca) {
-                            ca && 0 <= ca.indexOf("/") || (ca = (Ba || Ud() ? "https:" : "http:") +
-                                "//www.google-analytics.com/plugins/ua/" + ca);
-                            var l = ae(ca),
-                                e = void 0;
-                            var k = l.protocol,
-                                w = M.location.protocol,
-                                e = "https:" == k || k == w ? !0 : "http:" != k ? !1 : "http:" == w;
-                            var Xd;
-                            if (Xd = e) {
-                                var e =
-                                    l,
-                                    be = ae(M.location.href);
-                                if (e.query || 0 <= e.url.indexOf("?") || 0 <= e.path.indexOf("://")) Xd = !
-                                    1;
-                                else if (e.host == be.host && e.port == be.port) Xd = !0;
-                                else {
-                                    var ce = "http:" == e.protocol ? 80 : 443;
-                                    Xd = "www.google-analytics.com" == e.host && (e.port || ce) == ce && D(
-                                        e.path, "/plugins/") ? !0 : !1
-                                }
-                            }
-                            Xd && (wa(l.url), $d.set(g, !0))
-                        }
-                    }
-                }
-                b.push(d)
-            }
-        } catch (de) {}
+            d.g ? C(d.a[0], d.a[1]) : (d.i && (d.ha = y(d.c, d.a[0], d.X, d.W)), b.push(d))
+        } catch (e) {}
         return b
     };
     Z.v = function (a) {
@@ -1240,22 +1299,15 @@
                 else if (a.ba) N.remove(a.c);
                 else if (b)
                     if (a.i) {
-                        var c;
-                        var d = a.a[0],
-                            e = a.W;
-                        b == N || b.get(V);
-                        var g = Yd.get(d);
-                        ea(g) ? (b.plugins_ = b.plugins_ || new ee, b.plugins_.get(d) || b.plugins_.set(d, new g(
-                            b, e || {})), c = !0) : c = !1;
-                        if (!c) return !0
+                        if (a.ha && (a.ha = y(a.c, a.a[0], a.X, a.W)), !u(a.a[0], b, a.W)) return !0
                     } else if (a.K) {
-                    var ca = a.C,
-                        l = a.a,
-                        k = b.plugins_.get(a.K);
-                    k[ca].apply(k, l)
+                    var c = a.C,
+                        d = a.a,
+                        e = b.plugins_.get(a.K);
+                    e[c].apply(e, d)
                 } else b[a.C].apply(b, a.a)
             }
-        } catch (w) {}
+        } catch (g) {}
     };
     var N = function (a) {
         J(1);
@@ -1305,6 +1357,7 @@
             X("get", b, b.get, 7);
             X("set", b, b.set, 4);
             X("send", b, b.send);
+            X("requireSync", b, b.ma);
             b = Ya.prototype;
             X("get", b, b.get);
             X("set", b, b.set);
@@ -1322,14 +1375,14 @@
                 }
                 b && (Ba = !0)
             }
-            Ud() || Ba || !Ed(new Od) || (J(36), Ba = !0);
+            Ud() || Ba || !Ed() || (J(36), Ba = !0);
             (O.gaplugins = O.gaplugins || {}).Linker = Dc;
             b = Dc.prototype;
-            Yd.set("linker", Dc);
+            C("linker", Dc);
             X("decorate", b, b.ca, 20);
             X("autoLink", b, b.S, 25);
-            Yd.set("displayfeatures", fd);
-            Yd.set("adfeatures", fd);
+            C("displayfeatures", fd);
+            C("adfeatures", fd);
             a = a && a.q;
             ka(a) ? Z.D.apply(N, a) : J(50)
         }
@@ -1337,23 +1390,12 @@
     N.da = function () {
         for (var a = N.getAll(), b = 0; b < a.length; b++) a[b].get(V)
     };
-    (function () {
-        var a = N.N;
-        if (!rc(a)) {
-            J(16);
-            var b = !1,
-                c = function () {
-                    if (!b && rc(a)) {
-                        b = !0;
-                        var d = c,
-                            e = M;
-                        e.removeEventListener ? e.removeEventListener("visibilitychange", d, !1) : e.detachEvent &&
-                            e.detachEvent("onvisibilitychange", d)
-                    }
-                };
-            L(M, "visibilitychange", c)
-        }
-    })();
+    var E = N.N,
+        F = O[gb];
+    F && F.r ? E() : z(E);
+    z(function () {
+        Z.D(["provide", "render", ua])
+    });
 
     function La(a) {
         var b = 1,
