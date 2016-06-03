@@ -208,7 +208,7 @@
             return O.navigator.sendBeacon ? O.navigator.sendBeacon(a, b) ? (c(), !0) : !1 : !1
         },
         ge = function (a, b, c) {
-            1 <= 100 * Math.random() || Aa("?") || (a = ["t=error", "_e=" + a, "_v=j43", "sr=1"], b && a.push("_f=" +
+            1 <= 100 * Math.random() || Aa("?") || (a = ["t=error", "_e=" + a, "_v=j44", "sr=1"], b && a.push("_f=" +
                 b), c && a.push("_m=" + K(c.substring(0, 100))), a.push("aip=1"), a.push("z=" + hd()), wc(
                 oc() + "/collect", a.join("&"), ua))
         };
@@ -840,7 +840,7 @@
             } else if (0 <= b.indexOf(a[c])) return !0;
         return !1
     };
-    var p = /^GTM-[A-Z0-9]+$/,
+    var p = /^(GTM|OPT)-[A-Z0-9]+$/,
         q = /;_gaexp=[^;]*/g,
         r = /;((__utma=)|([^;=]+=GAX?\d+\.))[^;]*/g,
         t = function (a) {
@@ -979,7 +979,7 @@
             b(Ad, a[Ad]);
             b(n, a[n]);
             b(hb, 1);
-            b(ib, "j43");
+            b(ib, "j44");
             c(Qb, Ma);
             c(dd, cd);
             c(Rb, Oa);
@@ -1399,8 +1399,7 @@
 
     function La(a) {
         var b = 1,
-            c = 0,
-            d;
+            c, d;
         if (a)
             for (b = 0, d = a.length - 1; 0 <= d; d--) c = a.charCodeAt(d), b = (b << 6 & 268435455) + c + (c << 14),
                 c = b & 266338304, b = 0 != c ? b ^ c >> 21 : b;
