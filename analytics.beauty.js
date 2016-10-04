@@ -212,7 +212,7 @@
             return O.navigator.sendBeacon ? O.navigator.sendBeacon(a, b) ? (c(), !0) : !1 : !1
         },
         ge = function (a, b, c) {
-            1 <= 100 * Math.random() || G("?") || (a = ["t=error", "_e=" + a, "_v=j46", "sr=1"], b && a.push("_f=" +
+            1 <= 100 * Math.random() || G("?") || (a = ["t=error", "_e=" + a, "_v=j47", "sr=1"], b && a.push("_f=" +
                 b), c && a.push("_m=" + K(c.substring(0, 100))), a.push("aip=1"), a.push("z=" + hd()), wc(
                 oc() + "/collect", a.join("&"), ua))
         };
@@ -555,8 +555,8 @@
         b[a] = function () {
             try {
                 return d && J(d), c.apply(this, arguments)
-            } catch (b) {
-                throw ge("exc", a, b && b.name), b;
+            } catch (e) {
+                throw ge("exc", a, e && e.name), e;
             }
         }
     };
@@ -748,7 +748,7 @@
                 O: ca
             })
         }
-        return 0 == d.length ? void 0 : 1 == d.length ? d[0] : Zc(b, d) || Zc(c, d) || Zc(null, d) || d[0]
+        if (0 != d.length) return 1 == d.length ? d[0] : Zc(b, d) || Zc(c, d) || Zc(null, d) || d[0]
     }
 
     function Zc(a, b) {
@@ -820,13 +820,13 @@
                 c = c || O.event;
                 var d;
                 a: {
-                        var l = c.target || c.srcElement;
-                        for (c = 100; l && 0 < c;) {
-                            if (l.href && l.nodeName.match(/^a(?:rea)?$/i)) {
-                                d = l;
+                        var g = c.target || c.srcElement;
+                        for (c = 100; g && 0 < c;) {
+                            if (g.href && g.nodeName.match(/^a(?:rea)?$/i)) {
+                                d = g;
                                 break a
                             }
-                            l = l.parentNode;
+                            g = g.parentNode;
                             c--
                         }
                         d = {}
@@ -1001,7 +1001,7 @@
             b(Ad, a[Ad]);
             b(n, a[n]);
             b(hb, 1);
-            b(ib, "j46");
+            b(ib, "j47");
             c(Qb, Ma);
             c(dd, cd);
             c(Rb, Oa);
@@ -1318,7 +1318,7 @@
             if (a.u) a.u.call(O, N.j("t0"));
             else {
                 var b = a.c == gb ? N : N.j(a.c);
-                if (a.A) "t0" == a.c && N.create.apply(N, a.a);
+                if (a.A) "t0" != a.c || N.create.apply(N, a.a);
                 else if (a.ba) N.remove(a.c);
                 else if (b)
                     if (a.i) {
