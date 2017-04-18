@@ -217,7 +217,7 @@
             return O.navigator.sendBeacon ? O.navigator.sendBeacon(a, b) ? (c(), !0) : !1 : !1
         },
         ge = function (a, b, c) {
-            1 <= 100 * Math.random() || G("?") || (a = ["t=error", "_e=" + a, "_v=j50", "sr=1"], b && a.push("_f=" +
+            1 <= 100 * Math.random() || G("?") || (a = ["t=error", "_e=" + a, "_v=j51", "sr=1"], b && a.push("_f=" +
                 b), c && a.push("_m=" + K(c.substring(0, 100))), a.push("aip=1"), a.push("z=" + hd()), wc(
                 oc() + "/collect", a.join("&"), ua))
         };
@@ -1035,7 +1035,7 @@
                                     as: d
                                 },
                                 d = [];
-                            d.push("_v=j50");
+                            d.push("_v=j51");
                             d.push("id=10");
                             for (var w in k) k.hasOwnProperty(w) && d.push(w + "=" + K(k[w]));
                             d.push("z=" + hd());
@@ -1076,7 +1076,7 @@
             b(n, a[n]);
             b(ja, a[ja]);
             b(hb, 1);
-            b(ib, "j50");
+            b(ib, "j51");
             c(Qb, Ma);
             c(dd, cd);
             c(Rb, Oa);
@@ -1144,7 +1144,7 @@
             a.get(Q) || ((b = (b = O.gaGlobal && O.gaGlobal.vid) && -1 != b.search(/^(?:utma\.)?\d+\.\d+$/) ? b :
                 void 0) ? (J(17), a.data.set(Q,
                 b)) : (J(8), a.data.set(Q, ga())));
-            a.data.set(ja, a.get(ja) || 1 == Ed(new Od(0, !0), void 0, La(a.get(Q))));
+            a.data.set(ja, a.get(ja) || 1 == Ed(new Od(100, !0), void 0, La(a.get(Q))));
             a.get(ja) && (b = P(a, U), a.data.set(la, "_ga" == b ? "_gid" : b + "_gid"));
             a.get(ja) && !a.get(I) && (J(3), a.data.set(I, ga()));
             mc(a)
@@ -1162,8 +1162,8 @@
             c && a.set(qb, c.width + "x" + c.height);
             c && a.set(pb, c.colorDepth + "-bit");
             var c = M.documentElement,
-                g = (e = M.body) &&
-                e.clientWidth && e.clientHeight,
+                g = (e =
+                    M.body) && e.clientWidth && e.clientHeight,
                 ca = [];
             c && c.clientWidth && c.clientHeight && ("CSS1Compat" === M.compatMode || !g) ? ca = [c.clientWidth, c.clientHeight] :
                 g && (ca = [e.clientWidth, e.clientHeight]);
