@@ -218,7 +218,7 @@
             return O.navigator.sendBeacon ? O.navigator.sendBeacon(a, b) ? (c(), !0) : !1 : !1
         },
         ge = function (a, b, c) {
-            1 <= 100 * Math.random() || G("?") || (a = ["t=error", "_e=" + a, "_v=j54", "sr=1"], b && a.push("_f=" +
+            1 <= 100 * Math.random() || G("?") || (a = ["t=error", "_e=" + a, "_v=j55", "sr=1"], b && a.push("_f=" +
                 b), c && a.push("_m=" + K(c.substring(0, 100))), a.push("aip=1"), a.push("z=" + hd()), wc(
                 oc() + "/collect", a.join("&"),
                 ua))
@@ -810,12 +810,12 @@
     function Bc(a) {
         var b = a.get(Q);
         if (a.get(ja)) {
-            a = a.get(I);
-            var c = Ic(a + b, 0);
-            return "_ga=2." + K(c + "." + a + "-" + b)
+            var c = a.get(I);
+            a = pa(c + b, 0);
+            return "_ga=2." + K(a + "." + c + "-" + b)
         }
-        c = Ic(b, 0);
-        return "_ga=1." + K(c + "." + b)
+        a = pa(b, 0);
+        return "_ga=1." + K(a + "." + b)
     }
 
     function Ic(a, b) {
@@ -918,6 +918,7 @@
     var p = /^(GTM|OPT)-[A-Z0-9]+$/,
         q = /;_gaexp=[^;]*/g,
         r = /;((__utma=)|([^;=]+=GAX?\d+\.))[^;]*/g,
+        Aa = /^https?:\/\/[\w\-.]+\.google.com(:\d+)?\/optimize\/opt-launch\.html\?.*$/,
         t = function (a) {
             function b(a, b) {
                 b && (c += "&" + a + "=" + K(b))
@@ -925,13 +926,14 @@
             var c = "https://www.google-analytics.com/gtm/js?id=" + K(a.id);
             "dataLayer" != a.B && b("l", a.B);
             b("t", a.target);
-            b("cid", a.ja);
+            b("cid", a.clientId);
             b("cidt", a.ka);
             b("gac", a.la);
             b("aip", a.ia);
             a.sync && b("m", "sync");
             b("cycle", a.G);
             a.qa && b("gclid", a.qa);
+            Aa.test(M.referrer) && b("cb", String(hd()));
             return c
         };
     var Jd = function (a, b, c) {
@@ -945,6 +947,7 @@
             var c = b.get(Wb);
             b.set(Wb, function (b) {
                 Pd(a, b, a.U);
+                Pd(a, b, ia);
                 var d = c(b);
                 Qd(a, b);
                 return d
@@ -964,7 +967,8 @@
         },
         Id = function (a, b) {
             if (b.get(a.U)) {
-                var c = new ee,
+                var c =
+                    new ee,
                     d = function (a) {
                         $a(a).F && c.set($a(a).F, b.get(a))
                     };
@@ -974,6 +978,8 @@
                 d(Q);
                 d(Ad);
                 d(a.U);
+                d(ia);
+                d(I);
                 c.set($a(ld).F, Td(b));
                 var e = a.aa;
                 c.map(function (a, b) {
@@ -1057,7 +1063,7 @@
                                     as: d
                                 },
                                 d = [];
-                            d.push("_v=j54");
+                            d.push("_v=j55");
                             d.push("id=10");
                             for (var w in k) k.hasOwnProperty(w) && d.push(w + "=" + K(k[w]));
                             d.push("z=" + hd());
@@ -1098,7 +1104,7 @@
             b(n, a[n]);
             b(ja, a[ja]);
             b(hb, 1);
-            b(ib, "j54");
+            b(ib, "j55");
             c(Qb, Ma);
             c(oa, ua);
             c(dd, cd);
@@ -1122,9 +1128,14 @@
             this.ra = new Od(1E4, !0, "gaexp10")
         },
         Jc = function (a, b) {
+            a.data.set(ja, a.get(ja) || 1 == Ed(new Od(1, !0), void 0, La(a.get(Q))));
+            if (a.get(ja)) {
+                var c = P(a, U);
+                a.data.set(la, "_ga" == c ? "_gid" : c + "_gid")
+            }
             if ("cookie" == P(a, ac)) {
                 hc = !1;
-                var c = Ca(P(a, U));
+                c = Ca(P(a, U));
                 if (!(c = na(a, c))) {
                     var c = P(a, W),
                         d = P(a, $b) || xa();
@@ -1166,11 +1177,8 @@
                         a.data.set(Q, d)
                     } else J(21);
             b && (J(9), a.data.set(Q, K(b)));
-            a.get(Q) ||
-                ((b = (b = O.gaGlobal && O.gaGlobal.vid) && -1 != b.search(/^(?:utma\.)?\d+\.\d+$/) ? b : void 0) ?
-                    (J(17), a.data.set(Q, b)) : (J(8), a.data.set(Q, ga())));
-            a.data.set(ja, a.get(ja) || 1 == Ed(new Od(1, !0), void 0, La(a.get(Q))));
-            a.get(ja) && (b = P(a, U), a.data.set(la, "_ga" == b ? "_gid" : b + "_gid"));
+            a.get(Q) || ((b = (b = O.gaGlobal && O.gaGlobal.vid) && -1 != b.search(/^(?:utma\.)?\d+\.\d+$/) ? b :
+                void 0) ? (J(17), a.data.set(Q, b)) : (J(8), a.data.set(Q, ga())));
             a.get(ja) && !a.get(I) && (J(3), a.data.set(I, ga()));
             mc(a)
         },
@@ -1315,10 +1323,10 @@
                     a.get("&gtm") == b && (d.G = !0);
                     var g = String(a.get("name"));
                     "t0" != g && (d.target = g);
-                    G(String(a.get("trackingId"))) || (d.ja = String(a.get(Q)),
-                        d.ka = Number(a.get(n)), c = c.palindrome ? r : q, c = (c = M.cookie.replace(/^|(; +)/g,
-                            ";").match(c)) ? c.sort().join("").substring(1) : void 0, d.la = c, d.qa = E(a.b.get(
-                            kb) || "", "gclid"));
+                    G(String(a.get("trackingId"))) || (d.clientId =
+                        String(a.get(Q)), d.ka = Number(a.get(n)), c = c.palindrome ? r : q, c = (c = M.cookie.replace(
+                            /^|(; +)/g, ";").match(c)) ? c.sort().join("").substring(1) : void 0, d.la = c, d.qa =
+                        E(a.b.get(kb) || "", "gclid"));
                     a = d.B;
                     c = (new Date).getTime();
                     O[a] = O[a] || [];
@@ -1331,8 +1339,8 @@
                 }!c && Zd.hasOwnProperty(b) ? (J(39), c = b + ".js") : J(43);
                 c && (c && 0 <= c.indexOf("/") || (c = (Ba || Ud() ? "https:" : "http:") +
                         "//www.google-analytics.com/plugins/ua/" + c), d = ae(c), a = d.protocol, c = M.location
-                    .protocol, ("https:" == a || a == c || ("http:" != a ? 0 : "http:" ==
-                        c)) && B(d) && (wa(d.url, void 0, e), $d.set(b, !0)))
+                    .protocol, ("https:" == a || a == c || ("http:" !=
+                        a ? 0 : "http:" == c)) && B(d) && (wa(d.url, void 0, e), $d.set(b, !0)))
             }
         },
         v = function (a, b) {
@@ -1352,8 +1360,8 @@
             if (a.query || 0 <= a.url.indexOf("?") || 0 <= a.path.indexOf("://")) return !1;
             if (a.host == b.host && a.port == b.port) return !0;
             b = "http:" == a.protocol ? 80 : 443;
-            return "www.google-analytics.com" == a.host && (a.port || b) == b &&
-                D(a.path, "/plugins/") ? !0 : !1
+            return "www.google-analytics.com" == a.host && (a.port ||
+                b) == b && D(a.path, "/plugins/") ? !0 : !1
         },
         ae = function (a) {
             function b(a) {
