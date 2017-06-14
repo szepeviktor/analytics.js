@@ -1,4 +1,4 @@
-# Google Analytics js versions
+# Google Analytics JavaScript archive
 
 [analytics.js](//www.google-analytics.com/analytics.js)
 

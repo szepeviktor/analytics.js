@@ -1,5 +1,7 @@
 #!/bin/bash
 #
+# Commit new version of analytics.js.
+#
 # DEPENDS:npm install js-beautify
 
 set -e
@@ -20,3 +22,4 @@ VERSION="$(sed -n -e 's/^.*100 \* Math\.random.*"_v=\([[:alnum:]]\+\)".*$/\1/p' 
 
 git add -A
 git commit --date="$(date -R)" -m "Release ${VERSION}"
+git tag "$VERSION"

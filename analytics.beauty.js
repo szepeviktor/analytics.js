@@ -218,7 +218,7 @@
             return O.navigator.sendBeacon ? O.navigator.sendBeacon(a, b) ? (c(), !0) : !1 : !1
         },
         ge = function (a, b, c) {
-            1 <= 100 * Math.random() || G("?") || (a = ["t=error", "_e=" + a, "_v=j55", "sr=1"], b && a.push("_f=" +
+            1 <= 100 * Math.random() || G("?") || (a = ["t=error", "_e=" + a, "_v=j56", "sr=1"], b && a.push("_f=" +
                 b), c && a.push("_m=" + K(c.substring(0, 100))), a.push("aip=1"), a.push("z=" + hd()), wc(
                 oc() + "/collect", a.join("&"),
                 ua))
@@ -1063,7 +1063,7 @@
                                     as: d
                                 },
                                 d = [];
-                            d.push("_v=j55");
+                            d.push("_v=j56");
                             d.push("id=10");
                             for (var w in k) k.hasOwnProperty(w) && d.push(w + "=" + K(k[w]));
                             d.push("z=" + hd());
@@ -1104,7 +1104,7 @@
             b(n, a[n]);
             b(ja, a[ja]);
             b(hb, 1);
-            b(ib, "j55");
+            b(ib, "j56");
             c(Qb, Ma);
             c(oa, ua);
             c(dd, cd);
@@ -1144,37 +1144,39 @@
                 }
                 c && (a.data.set(Q, c), c = Ca(P(a, la)), (c = na(a, c)) && a.data.set(I, c), hc = !0)
             }
-            a: if (c = a.get(cc), c = E(M.location[c ? "href" : "search"], "_ga"))
+            a: if (c = a.get(cc), d = E(M.location[c ? "href" : "search"], "_ga"))
                 if (a.get(bc))
-                    if (d = c.indexOf("."), -1 == d) J(22);
+                    if (c = d.indexOf("."), -1 == c) J(22);
                     else {
-                        var e = c.substring(0, d),
-                            g = c.substring(d + 1),
-                            d = g.indexOf("."),
-                            c = g.substring(0, d),
-                            g = g.substring(d + 1);
+                        var e = d.substring(0, c),
+                            g = d.substring(c + 1),
+                            c = g.indexOf("."),
+                            d = g.substring(0, c),
+                            g = g.substring(c + 1);
                         if ("1" == e) {
-                            if (d = g, c != Ic(d, 0) && c != Ic(d, -1) && c != Ic(d, -2) && c != pa(d, 0) && c !=
-                                pa(d, -1) && c != pa(d, -2)) {
+                            if (c = g, d != Ic(c, 0) && d != Ic(c, -1) && d != Ic(c, -2) && d != pa(c, 0) && d !=
+                                pa(c, -1) && d != pa(c, -2)) {
                                 J(23);
                                 break a
                             }
                         } else if ("2" == e) {
-                            e = g.split("-", 2);
-                            d = e[1];
-                            if (c != Ic(e[0] + d, 0) && c != Ic(e[0] + d, -1) && c != Ic(e[0] + d, -2) && c !=
-                                pa(e[0] + d, 0) && c != pa(e[0] + d, -1) && c != pa(e[0] + d, -2)) {
+                            c = g.indexOf("-");
+                            e = g.substring(0, c);
+                            c = g.substring(c + 1);
+                            if (d != Ic(e + c, 0) && d != Ic(e + c, -1) && d != Ic(e + c, -2) && d != pa(e + c,
+                                    0) && d != pa(e + c, -1) && d != pa(e +
+                                    c, -2)) {
                                 J(53);
                                 break a
                             }
                             J(2);
-                            a.data.set(I, e[0])
+                            a.data.set(I, e)
                         } else {
                             J(22);
                             break a
                         }
                         J(11);
-                        a.data.set(Q, d)
+                        a.data.set(Q, c)
                     } else J(21);
             b && (J(9), a.data.set(Q, K(b)));
             a.get(Q) || ((b = (b = O.gaGlobal && O.gaGlobal.vid) && -1 != b.search(/^(?:utma\.)?\d+\.\d+$/) ? b :
@@ -1190,10 +1192,10 @@
             if (d) {
                 var e = d.pathname || "";
                 "/" != e.charAt(0) && (J(31), e = "/" + e);
-                a.set(kb, d.protocol + "//" + d.hostname + e + d.search)
+                a.set(kb, d.protocol + "//" + d.hostname +
+                    e + d.search)
             }
-            c &&
-                a.set(qb, c.width + "x" + c.height);
+            c && a.set(qb, c.width + "x" + c.height);
             c && a.set(pb, c.colorDepth + "-bit");
             var c = M.documentElement,
                 g = (e = M.body) && e.clientWidth && e.clientHeight,
@@ -1205,7 +1207,8 @@
             a.set(tb, fc());
             a.set(ob, M.characterSet || M.charset);
             a.set(sb, b && "function" === typeof b.javaEnabled && b.javaEnabled() || !1);
-            a.set(nb, (b && (b.language || b.browserLanguage) || "").toLowerCase());
+            a.set(nb, (b && (b.language || b.browserLanguage) ||
+                "").toLowerCase());
             if (d && a.get(cc) && (b = M.location.hash)) {
                 b = b.split(/[?&#]+/);
                 d = [];
