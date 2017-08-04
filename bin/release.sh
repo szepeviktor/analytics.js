@@ -2,7 +2,7 @@
 #
 # Commit new version of analytics.js.
 #
-# DEPENDS:npm install js-beautify
+# DEPENDS       :npm install js-beautify
 
 set -e
 
@@ -25,3 +25,5 @@ test -n "$VERSION"
 git add -A
 git commit --date="$(date -R)" -m "Release ${VERSION}"
 git tag "$VERSION"
+
+echo "git push --follow-tags"
