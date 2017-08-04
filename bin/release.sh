@@ -20,6 +20,8 @@ js-beautify --space-after-anon-function --good-stuff --wrap-line-length 120 \
 
 VERSION="$(sed -n -e 's/^.*100 \* Math\.random.*"_v=\([[:alnum:]]\+\)".*$/\1/p' "$BEAUTY")"
 
+test -n "$VERSION"
+
 git add -A
 git commit --date="$(date -R)" -m "Release ${VERSION}"
 git tag "$VERSION"
