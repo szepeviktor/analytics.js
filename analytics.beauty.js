@@ -91,15 +91,20 @@
             var a = "" + M.location.hostname;
             return 0 == a.indexOf("www.") ? a.substring(4) : a
         },
-        ya = function (a) {
-            var b = M.referrer;
-            if (/^https?:\/\//i.test(b)) {
-                if (a) return b;
+        de = function (a, b) {
+            var c = a.indexOf(b);
+            if (5 == c || 6 == c)
+                if (a = a.charAt(c + b.length), "/" == a ||
+                    "?" == a || "" == a || ":" == a) return !0;
+            return !1
+        },
+        ya = function (a, b) {
+            var c = M.referrer;
+            if (/^https?:\/\//i.test(c)) {
+                if (a) return c;
                 a = "//" + M.location.hostname;
-                var c = b.indexOf(a);
-                if (5 == c || 6 == c)
-                    if (a = b.charAt(c + a.length), "/" == a || "?" == a || "" == a || ":" == a) return;
-                return b
+                if (!de(c, a)) return b && (b = a.replace(/\./g, "-") + ".cdn.ampproject.org", de(c, b)) ? void 0 :
+                    c
             }
         },
         za = function (a, b) {
@@ -176,7 +181,7 @@
             M.cookie = c;
             if (!(d = d != M.cookie)) a: {
                 a =
-                    Ca(a);
+                Ca(a);
                 for (d = 0; d < a.length; d++)
                     if (b == a[d]) {
                         d = !0;
@@ -191,7 +196,8 @@
         },
         vc = /^(www\.)?google(\.com?)?(\.[a-z]{2})?$/,
         eb = /(^|\.)doubleclick\.net$/i;
-    var Fa, Ga, fb, Ab, Ub = [],
+    var Fa, Ga, fb, Ab, ja = /^https?:\/\/[^/]*cdn\.ampproject\.org\//,
+        Ub = [],
         ic = function () {
             Z.D([ua])
         },
@@ -200,6 +206,7 @@
             if (1 < c.length) return J(55), !1;
             c = c[0] || "";
             if ("$OPT_OUT" == c || "$ERROR" == c || G(b)) return J(62), !1;
+            if (!ja.test(M.referrer) && "$NOT_FOUND" == c) return J(68), !1;
             if (void 0 !== Ab) return J(56), va(function () {
                 a(Ab)
             }, 0), !0;
@@ -228,11 +235,11 @@
                     try {
                         200 != c.status && (J(61), Qc("", "$ERROR", 3E4));
                         var a = JSON.parse(c.responseText);
-                        a.optOut ? (J(63), Qc("", "$OPT_OUT", 31536E6)) : a.clientId ? Qc(a.clientId, a.securityToken,
-                            31536E6) : (J(64), Qc("", "$ERROR", 864E5))
+                        a.optOut ? (J(63), Qc("", "$OPT_OUT", 31536E6)) :
+                            a.clientId ? Qc(a.clientId, a.securityToken, 31536E6) : (J(64), Qc("", "$NOT_FOUND",
+                                36E5))
                     } catch (e) {
-                        J(65),
-                            Qc("", "$ERROR", 864E5)
+                        J(65), Qc("", "$ERROR", 3E4)
                     }
                     c = null
                 }
@@ -266,7 +273,8 @@
         },
         Qc = function (a, b, c) {
             Ga && clearTimeout(Ga);
-            b && xc(b, c);
+            b && xc(b,
+                c);
             Ab = a;
             b = Ub;
             Ub = [];
@@ -312,7 +320,7 @@
             return O.navigator.sendBeacon ? O.navigator.sendBeacon(a, b) ? (c(), !0) : !1 : !1
         },
         ge = function (a, b, c) {
-            1 <= 100 * Math.random() || G("?") || (a = ["t=error", "_e=" + a, "_v=j58", "sr=1"], b && a.push("_f=" +
+            1 <= 100 * Math.random() || G("?") || (a = ["t=error", "_e=" + a, "_v=j59", "sr=1"], b && a.push("_f=" +
                 b), c && a.push("_m=" + K(c.substring(0, 100))), a.push("aip=1"), a.push("z=" + hd()), wc(
                 oc() + "/collect", a.join("&"),
                 ua))
@@ -653,7 +661,6 @@
         dc = T("siteSpeedSampleRate", void 0, 1),
         ec = T("alwaysSendReferrer", void 0, !1),
         I = T("_gid", "_gid"),
-        ja = T("_ge"),
         la = T("_gcn"),
         Kd = T("useAmpClientId"),
         gd = S("transportUrl"),
@@ -668,14 +675,15 @@
             }
         }
     };
-    var Od = function (a, b, c) {
-            this.V = a;
-            this.fa = b;
+    var Od = function (a, b) {
+            this.V = 1E4;
+            this.fa = a;
             this.$ = !1;
-            this.oa = c;
+            this.oa = b;
             this.ea = 1
         },
-        Ed = function (a, b, c) {
+        Ed = function (a, b) {
+            var c;
             if (a.fa && a.$) return 0;
             a.$ = !0;
             if (b) {
@@ -777,7 +785,7 @@
                     var b = 1E3 * R(a, Zb);
                     ma(a, Q, U, b)
                 }
-                a.get(ja) && ma(a, I, la, 864E5)
+                ma(a, I, la, 864E5)
             }
         },
         ma = function (a, b, c, d) {
@@ -797,15 +805,15 @@
                         }
                     a.data.set(W, "auto")
                 }
-            } else a.get(ja) || J(54)
+            }
         },
         nc = function (a) {
             if ("cookie" == P(a, ac) && !hc && (mc(a), !hc)) throw "abort";
         },
-        Yc =
-        function (a) {
+        Yc = function (a) {
             if (a.get(Wc)) {
-                var b = P(a, W),
+                var b =
+                    P(a, W),
                     c = P(a, $b) || xa(),
                     d = Xc("__utma", c, b);
                 d && (J(19), a.set(Tc, (new Date).getTime(), !0), a.set(Rc, d.R), (b = Xc("__utmz", c, b)) && d.hash ==
@@ -829,9 +837,8 @@
                     var g = a[e];
                     var ca = g.split(".");
                     var l = ca.shift();
-                    ("GA1" == l ||
-                        "1" == l) && 1 < ca.length ? (g = ca.shift().split("-"), 1 == g.length && (g[1] = "1"), g[0] *=
-                        1, g[1] *= 1, ca = {
+                    ("GA1" == l || "1" == l) && 1 < ca.length ? (g = ca.shift().split("-"),
+                        1 == g.length && (g[1] = "1"), g[0] *= 1, g[1] *= 1, ca = {
                             H: g,
                             s: ca.join(".")
                         }) : ca = kd.test(g) ? {
@@ -858,11 +865,11 @@
                 l.H[c] == b ? d.push(l) : void 0 == g || l.H[c] < g ? (e = [l], g = l.H[c]) : l.H[c] == g && e.push(
                     l)
             }
-            return 0 <
-                d.length ? d : e
+            return 0 < d.length ? d : e
         },
         lc = function (a) {
-            return 0 == a.indexOf(".") ? a.substr(1) : a
+            return 0 ==
+                a.indexOf(".") ? a.substr(1) : a
         },
         id = function () {
             var a = [],
@@ -913,13 +920,8 @@
 
     function Bc(a) {
         var b = a.get(Q);
-        if (a.get(ja)) {
-            var c = a.get(I);
-            a = pa(c + b, 0);
-            return "_ga=2." + K(a + "." + c + "-" + b)
-        }
-        a = pa(b, 0);
-        return "_ga=1." + K(a + "." + b)
+        a = a.get(I) || "";
+        return "_ga=2." + K(pa(a + b, 0) + "." + a + "-" + b)
     }
 
     function Ic(a, b) {
@@ -933,9 +935,10 @@
 
     function pa(a, b) {
         var c = new Date,
-            d = O.navigator;
-        return La([a, d.userAgent, d.language || "", c.getTimezoneOffset(), c.getYear(), c.getDate(), c.getHours(),
-            c.getMinutes() + b].join("."))
+            d = O.navigator,
+            e = c.getHours() + Math.floor((c.getMinutes() + b) / 60);
+        return La([a, d.userAgent, d.language || "", c.getTimezoneOffset(), c.getYear(), c.getDate() + Math.floor(e /
+            24), (24 + e) % 24, (60 + c.getMinutes() + b) % 60].join("."))
     }
     var Dc = function (a) {
         J(48);
@@ -1167,7 +1170,7 @@
                                     as: d
                                 };
                             d = [];
-                            d.push("_v=j58");
+                            d.push("_v=j59");
                             d.push("id=10");
                             for (var w in k) k.hasOwnProperty(w) && d.push(w + "=" + K(k[w]));
                             d.push("z=" + hd());
@@ -1207,9 +1210,9 @@
             b(ac, a[ac]);
             b(Ad, a[Ad]);
             b(n, a[n]);
-            b(ja, a[ja]);
+            b(Kd, a[Kd]);
             b(hb, 1);
-            b(ib, "j58");
+            b(ib, "j59");
             c(Qb, Ma);
             c(oa, ua);
             c(dd, cd);
@@ -1230,14 +1233,17 @@
             Kc(this.b);
             this.b.set(jb, Lc());
             bd(this.b.get(Na), this.b.get(W), this.b.get(Yb));
-            this.ra = new Od(1E4, !0, "gaexp10")
+            this.ra = new Od(!0, "gaexp10");
+            (function () {
+                if (Ed(new Od(!0, "gacookie14"), d.b)) {
+                    var a = Ca("_gclid");
+                    a && 0 < a.length && J(44)
+                }
+            })()
         },
         Jc = function (a, b) {
-            a.data.set(ja, a.get(ja) || 1 == Ed(new Od(1, !0), void 0, La(a.get(Q))));
-            if (a.get(ja)) {
-                var c = P(a, U);
-                a.data.set(la, "_ga" == c ? "_gid" : c + "_gid")
-            }
+            var c = P(a, U);
+            a.data.set(la, "_ga" == c ? "_gid" : c + "_gid");
             if ("cookie" == P(a, ac)) {
                 hc = !1;
                 c = Ca(P(a, U));
@@ -1249,9 +1255,9 @@
                     void 0 != c ? (J(10), c = c.O[1] + "." + c.O[2]) : c = void 0
                 }
                 c && (hc = !0);
-                if (d = c && !a.get(Hd))
-                    if (d =
-                        c.split("."), 2 != d.length) d = !1;
+                if (d =
+                    c && !a.get(Hd))
+                    if (d = c.split("."), 2 != d.length) d = !1;
                     else if (d = Number(d[1])) {
                     var e = R(a, Zb);
                     d = d + e < (new Date).getTime() / 1E3
@@ -1269,42 +1275,41 @@
                         d = g.substring(0, c);
                         g = g.substring(c + 1);
                         if ("1" == e) {
-                            if (c = g, d != Ic(c, 0) && d != Ic(c, -1) && d != Ic(c, -2) && d != pa(c, 0) && d !=
-                                pa(c, -1) &&
-                                d != pa(c, -2)) {
+                            if (c = g, d != Ic(c, 0) && d != Ic(c, -1) && d != Ic(c, -2) && d != pa(c,
+                                    0) && d != pa(c, -1) && d != pa(c, -2)) {
                                 J(23);
                                 break a
                             }
                         } else if ("2" == e) {
                             c = g.indexOf("-");
-                            e = g.substring(0, c);
-                            c = g.substring(c + 1);
+                            e = "";
+                            0 < c ? (e = g.substring(0, c), c = g.substring(c + 1)) : c = g.substring(1);
                             if (d != Ic(e + c, 0) && d != Ic(e + c, -1) && d != Ic(e + c, -2) && d != pa(e + c,
                                     0) && d != pa(e + c, -1) && d != pa(e + c, -2)) {
                                 J(53);
                                 break a
                             }
-                            J(2);
-                            a.data.set(I, e)
+                            e && (J(2), a.data.set(I, e))
                         } else {
                             J(22);
                             break a
                         }
                         J(11);
                         a.data.set(Q, c)
-                    } else J(21);
+                    }
+            else J(21);
             b && (J(9), a.data.set(Q, K(b)));
             a.get(Q) || ((b = (b = O.gaGlobal && O.gaGlobal.vid) && -1 != b.search(jd) ? b : void 0) ? (J(17), a.data
                 .set(Q, b)) : (J(8), a.data.set(Q, ra())));
-            a.get(ja) && !a.get(I) && (J(3), a.data.set(I, ra()));
+            a.get(I) || (J(3), a.data.set(I,
+                ra()));
             mc(a)
         },
         Kc = function (a) {
-            var b =
-                O.navigator,
+            var b = O.navigator,
                 c = O.screen,
                 d = M.location;
-            a.set(lb, ya(a.get(ec)));
+            a.set(lb, ya(a.get(ec), a.get(Kd)));
             if (d) {
                 var e = d.pathname || "";
                 "/" != e.charAt(0) && (J(31), e = "/" + e);
@@ -1317,10 +1322,10 @@
                 ca = [];
             c && c.clientWidth && c.clientHeight && ("CSS1Compat" === M.compatMode || !g) ? ca = [c.clientWidth, c.clientHeight] :
                 g && (ca = [e.clientWidth, e.clientHeight]);
-            c = 0 >= ca[0] || 0 >= ca[1] ? "" : ca.join("x");
+            c = 0 >=
+                ca[0] || 0 >= ca[1] ? "" : ca.join("x");
             a.set(rb, c);
-            a.set(tb,
-                fc());
+            a.set(tb, fc());
             a.set(ob, M.characterSet || M.charset);
             a.set(sb, b && "function" === typeof b.javaEnabled && b.javaEnabled() || !1);
             a.set(nb, (b && (b.language || b.browserLanguage) || "").toLowerCase());
@@ -1330,8 +1335,7 @@
                 for (c = 0; c < b.length; ++c)(D(b[c], "utm_id") || D(b[c], "utm_campaign") || D(b[c], "utm_source") ||
                     D(b[c], "utm_medium") || D(b[c], "utm_term") || D(b[c], "utm_content") || D(b[c], "gclid") ||
                     D(b[c], "dclid") || D(b[c], "gclsrc")) && d.push(b[c]);
-                0 < d.length && (b = "#" + d.join("&"), a.set(kb, a.get(kb) +
-                    b))
+                0 < d.length && (b = "#" + d.join("&"), a.set(kb, a.get(kb) + b))
             }
         };
     pc.prototype.get = function (a) {
@@ -1565,18 +1569,27 @@
         var c = "" + b[V];
         if (N.h[c]) return N.h[c];
         a: {
-            if (b[Kd])
-                if (J(67), Ab) b[Q] || (b[Q] = Ab);
+            if (b[Kd]) {
+                J(67);
+                if (b[ac] && "cookie" != b[ac]) {
+                    var d = !1;
+                    break a
+                }
+                if (Ab) b[Q] || (b[Q] = Ab);
                 else {
-                    var d = String(b[W] || xa());
+                    d = String(b[W] || xa());
                     var e = String(b[Yb] || "/"),
                         g = Ca(String(b[U] || "_ga"));
                     d = na(g, d, e);
-                    if ((!d || jd.test(d) || kd.test(d)) && tc(ic, String(b[Na]))) {
+                    !d || jd.test(d) ? d = !0 : (d = Ca("AMP_TOKEN"), d = 0 == d.length || 1 == d.length &&
+                        ("$RETRIEVING" == d[0] || "$OPT_OUT" == d[0] || "$ERROR" == d[0] ||
+                            "$NOT_FOUND" == d[0]) ? !0 : !1);
+                    if (d && tc(ic, String(b[Na]))) {
                         d = !0;
                         break a
                     }
                 }
+            }
             d = !1
         }
         if (d) return null;
@@ -1633,7 +1646,7 @@
                 }
                 b && (Ba = !0)
             }
-            Ud() || Ba || !Ed(new Od(1E4)) || (J(36), Ba = !0);
+            Ud() || Ba || !Ed(new Od) || (J(36), Ba = !0);
             (O.gaplugins = O.gaplugins || {}).Linker = Dc;
             b = Dc.prototype;
             C("linker", Dc);
