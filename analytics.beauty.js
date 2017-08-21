@@ -157,7 +157,7 @@
                 e && a.push(e[1])
             }
             for (b = 0; b < a.length; b++)
-                if ("$OPT_OUT" == a[b]) return !0;
+                if ("$OPT_OUT" == decodeURIComponent(a[b])) return !0;
             return !1
         };
     var Ca = function (a) {
@@ -204,7 +204,7 @@
         tc = function (a, b) {
             var c = Ca("AMP_TOKEN");
             if (1 < c.length) return J(55), !1;
-            c = c[0] || "";
+            c = decodeURIComponent(c[0] || "");
             if ("$OPT_OUT" == c || "$ERROR" == c || G(b)) return J(62), !1;
             if (!ja.test(M.referrer) && "$NOT_FOUND" == c) return J(68), !1;
             if (void 0 !== Ab) return J(56), va(function () {
@@ -215,7 +215,8 @@
                 tc(a, b)
             }, 1E3), !0;
             Fa = !0;
-            c || (xc("$RETRIEVING", 3E4), setTimeout(Mc, 3E4));
+            c && "$" != c[0] || (xc("$RETRIEVING", 3E4), setTimeout(Mc,
+                3E4), c = "");
             return Pc(c) ? (Ub.push(a), !0) : !1
         },
         Pc = function (a) {
@@ -235,9 +236,8 @@
                     try {
                         200 != c.status && (J(61), Qc("", "$ERROR", 3E4));
                         var a = JSON.parse(c.responseText);
-                        a.optOut ? (J(63), Qc("", "$OPT_OUT", 31536E6)) :
-                            a.clientId ? Qc(a.clientId, a.securityToken, 31536E6) : (J(64), Qc("", "$NOT_FOUND",
-                                36E5))
+                        a.optOut ? (J(63), Qc("", "$OPT_OUT", 31536E6)) : a.clientId ? Qc(a.clientId, a.securityToken,
+                            31536E6) : (J(64), Qc("", "$NOT_FOUND", 36E5))
                     } catch (e) {
                         J(65), Qc("", "$ERROR", 3E4)
                     }
@@ -263,18 +263,18 @@
                 fb = "";
                 for (var c = id(), d = 0; d < c.length; d++) {
                     var e = c[d];
-                    if (zc("AMP_TOKEN", a, "/", e, "", b)) {
+                    if (zc("AMP_TOKEN", encodeURIComponent(a), "/", e, "", b)) {
                         fb = e;
                         return
                     }
                 }
             }
-            zc("AMP_TOKEN", a, "/", fb, "", b)
+            zc("AMP_TOKEN", encodeURIComponent(a),
+                "/", fb, "", b)
         },
         Qc = function (a, b, c) {
             Ga && clearTimeout(Ga);
-            b && xc(b,
-                c);
+            b && xc(b, c);
             Ab = a;
             b = Ub;
             Ub = [];
@@ -320,7 +320,7 @@
             return O.navigator.sendBeacon ? O.navigator.sendBeacon(a, b) ? (c(), !0) : !1 : !1
         },
         ge = function (a, b, c) {
-            1 <= 100 * Math.random() || G("?") || (a = ["t=error", "_e=" + a, "_v=j59", "sr=1"], b && a.push("_f=" +
+            1 <= 100 * Math.random() || G("?") || (a = ["t=error", "_e=" + a, "_v=j60", "sr=1"], b && a.push("_f=" +
                 b), c && a.push("_m=" + K(c.substring(0, 100))), a.push("aip=1"), a.push("z=" + hd()), wc(
                 oc() + "/collect", a.join("&"),
                 ua))
@@ -1170,7 +1170,7 @@
                                     as: d
                                 };
                             d = [];
-                            d.push("_v=j59");
+                            d.push("_v=j60");
                             d.push("id=10");
                             for (var w in k) k.hasOwnProperty(w) && d.push(w + "=" + K(k[w]));
                             d.push("z=" + hd());
@@ -1212,7 +1212,7 @@
             b(n, a[n]);
             b(Kd, a[Kd]);
             b(hb, 1);
-            b(ib, "j59");
+            b(ib, "j60");
             c(Qb, Ma);
             c(oa, ua);
             c(dd, cd);
@@ -1528,11 +1528,11 @@
         Z.f = Z.f.concat(b)
     };
     Z.J = function (a) {
-        for (var b, c = [], d = 0; d < arguments.length; d++) try {
-            b = new sc(arguments[d]), b.g ? C(b.a[0], b.a[1]) : (b.i && (b.ha = y(b.c, b.a[0], b.X, b.W)),
-                c.push(b))
+        for (var b = [], c = 0; c < arguments.length; c++) try {
+            var d = new sc(arguments[c]);
+            d.g ? C(d.a[0], d.a[1]) : (d.i && (d.ha = y(d.c, d.a[0], d.X, d.W)), b.push(d))
         } catch (e) {}
-        return c
+        return b
     };
     Z.v = function (a) {
         try {
@@ -1575,16 +1575,25 @@
                     var d = !1;
                     break a
                 }
-                if (Ab) b[Q] || (b[Q] = Ab);
+                if (void 0 !== Ab) b[Q] || (b[Q] = Ab);
                 else {
-                    d = String(b[W] || xa());
-                    var e = String(b[Yb] || "/"),
-                        g = Ca(String(b[U] || "_ga"));
-                    d = na(g, d, e);
-                    !d || jd.test(d) ? d = !0 : (d = Ca("AMP_TOKEN"), d = 0 == d.length || 1 == d.length &&
-                        ("$RETRIEVING" == d[0] || "$OPT_OUT" == d[0] || "$ERROR" == d[0] ||
-                            "$NOT_FOUND" == d[0]) ? !0 : !1);
-                    if (d && tc(ic, String(b[Na]))) {
+                    b: {
+                        d = String(b[W] || xa());
+                        var e = String(b[Yb] || "/"),
+                            g = Ca(String(b[U] || "_ga"));d = na(g, d, e);
+                        if (!d || jd.test(d)) d = !0;
+                        else if (d = Ca("AMP_TOKEN"), 0 == d.length) d = !0;
+                        else {
+                            if (1 == d.length && (d = decodeURIComponent(d[0]), "$RETRIEVING" == d ||
+                                    "$OPT_OUT" == d || "$ERROR" == d || "$NOT_FOUND" == d)) {
+                                d = !0;
+                                break b
+                            }
+                            d = !1
+                        }
+                    }
+                    if (d &&
+                        tc(ic, String(b[Na]))) {
                         d = !0;
                         break a
                     }
