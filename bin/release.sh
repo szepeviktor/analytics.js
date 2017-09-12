@@ -26,4 +26,4 @@ git add -A
 git commit --date="$(date -R)" -m "Release ${VERSION}"
 git tag "$VERSION"
 
-echo "git push --follow-tags"
+echo "git push; git push --tags"
