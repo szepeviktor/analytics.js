@@ -103,7 +103,7 @@
         },
         ya = function (a, b) {
             var c = M.referrer;
-            if (/^https?:\/\//i.test(c)) {
+            if (/^(https?|android-app):\/\//i.test(c)) {
                 if (a) return c;
                 a = "//" + M.location.hostname;
                 if (!de(c, a)) return b && (b = a.replace(/\./g, "-") + ".cdn.ampproject.org", de(c, b)) ? void 0 :
@@ -114,8 +114,8 @@
             if (1 == b.length && null != b[0] && "object" === typeof b[0]) return b[0];
             for (var c = {}, d = Math.min(a.length + 1, b.length), e = 0; e < d; e++)
                 if ("object" === typeof b[e]) {
-                    for (var g in b[e]) b[e].hasOwnProperty(g) && (c[g] =
-                        b[e][g]);
+                    for (var g in b[e]) b[e].hasOwnProperty(g) &&
+                        (c[g] = b[e][g]);
                     break
                 } else e < a.length && (c[a[e]] = b[e]);
             return c
@@ -177,15 +177,14 @@
         zc = function (a, b, c, d, e, g) {
             e = G(e) ? !1 : eb.test(M.location.hostname) || "/" == c && vc.test(d) ? !1 : !0;
             if (!e) return !1;
-            b && 1200 < b.length && (b = b.substring(0, 1200), J(24));
+            b && 1200 < b.length && (b = b.substring(0, 1200));
             c = a + "=" + b + "; path=" + c + "; ";
             g && (c += "expires=" + (new Date((new Date).getTime() + g)).toGMTString() + "; ");
             d && "none" != d && (c += "domain=" + d + ";");
             d = M.cookie;
             M.cookie = c;
             if (!(d = d != M.cookie)) a: {
-                a =
-                Ca(a);
+                a = Ca(a);
                 for (d = 0; d < a.length; d++)
                     if (b == a[d]) {
                         d = !0;
@@ -196,7 +195,7 @@
             return d
         },
         Cc = function (a) {
-            return K(a).replace(/\(/g, "%28").replace(/\)/g, "%29")
+            return encodeURIComponent ? encodeURIComponent(a).replace(/\(/g, "%28").replace(/\)/g, "%29") : a
         },
         vc = /^(www\.)?google(\.com?)?(\.[a-z]{2})?$/,
         eb = /(^|\.)doubleclick\.net$/i;
@@ -324,7 +323,7 @@
             return O.navigator.sendBeacon ? O.navigator.sendBeacon(a, b) ? (c(), !0) : !1 : !1
         },
         ge = function (a, b, c) {
-            1 <= 100 * Math.random() || G("?") || (a = ["t=error", "_e=" + a, "_v=j62", "sr=1"], b && a.push("_f=" +
+            1 <= 100 * Math.random() || G("?") || (a = ["t=error", "_e=" + a, "_v=j63", "sr=1"], b && a.push("_f=" +
                 b), c && a.push("_m=" + K(c.substring(0, 100))), a.push("aip=1"), a.push("z=" + hd()), wc(
                 oc() + "/collect", a.join("&"),
                 ua))
@@ -796,19 +795,19 @@
                 }
                 ma(a, I, la, 864E5);
                 if (a.get(je)) {
-                    if (b = a.get(ce)) {
-                        var c = a.get(ie);
-                        if (c && "aw.ds" != c) J(69);
-                        else {
-                            b = ["1", a.get(fe), Cc(b)].join(".");
-                            c = kc(P(a, Yb));
-                            var d = lc(P(a, W)),
-                                e = P(a, Na),
-                                g = Math.min(R(a, he), 1E3 * R(a, Zb));
-                            g = Math.min(g, 1E3 * R(a, fe) + g - (new Date).getTime());
-                            a.data.set(he, g);
-                            0 < g && (J(77), zc("_gac_" + Cc(e), b, c, d, e, g))
-                        }
+                    var c = a.get(ce);
+                    if (c) {
+                        var d = Math.min(R(a, he), 1E3 * R(a, Zb));
+                        d = Math.min(d, 1E3 * R(a, fe) + d - (new Date).getTime());
+                        a.data.set(he, d);
+                        var e = a.get(fe),
+                            g = a.get(ie);
+                        b = kc(P(a, Yb));
+                        var ca = lc(P(a, W));
+                        a = P(a, Na);
+                        g && "aw.ds" != g || (c = ["1", e, Cc(c)].join("."), 0 < d && zc("_gac_" + Cc(a), c, b, ca,
+                            a, d));
+                        le({})
                     }
                 } else J(75)
             }
@@ -818,8 +817,8 @@
             if (e) {
                 c = P(a, c);
                 var g = kc(P(a, Yb)),
-                    ca = lc(P(a,
-                        W)),
+                    ca =
+                    lc(P(a, W)),
                     l = P(a, Na);
                 if ("auto" != ca) zc(c, e, g, ca, l, d) && (hc = !0);
                 else {
@@ -847,7 +846,8 @@
         },
         nd = function (a, b) {
             b = Cc(P(a, b));
-            var c = lc(P(a, W)).split(".").length;
+            var c = lc(P(a,
+                W)).split(".").length;
             a = jc(P(a, Yb));
             1 < a && (c += "-" + a);
             return b ? ["GA1", c, b].join(".") : ""
@@ -876,8 +876,7 @@
                 if (0 == d.length) J(12);
                 else {
                     J(14);
-                    d = Gc(d, lc(b).split(".").length,
-                        0);
+                    d = Gc(d, lc(b).split(".").length, 0);
                     if (1 == d.length) return d[0].s;
                     d = Gc(d, jc(c), 1);
                     1 < d.length && J(41);
@@ -916,6 +915,13 @@
         jc = function (a) {
             a = kc(a);
             return "/" == a ? 1 : a.split("/").length
+        },
+        le = function (a) {
+            a.ta && J(77);
+            a.na && J(74);
+            a.pa && J(73);
+            a.ua && J(69);
+            a.sa && J(78)
         };
 
     function Xc(a, b, c) {
@@ -941,7 +947,8 @@
             if (b[d].hash == c || b[d].hash == a) return b[d]
     };
     var od = new RegExp(/^https?:\/\/([^\/:]+)/),
-        pd = /(.*)([?&#])(?:_ga=[^&#]*)(?:&?)(.*)/;
+        pd = /(.*)([?&#])(?:_ga=[^&#]*)(?:&?)(.*)/,
+        me = /(.*)([?&#])(?:_gac=[^&#]*)(?:&?)(.*)/;
 
     function Bc(a) {
         var b = a.get(Q),
@@ -989,12 +996,14 @@
     var qd = function (a, b, c) {
             var d = pd.exec(b);
             d && 3 <= d.length && (b = d[1] + (d[3] ? d[2] + d[3] : ""));
+            (d = me.exec(b)) && 3 <= d.length && (b = d[1] + (d[3] ? d[2] + d[3] : ""));
             a = a.target.get("linkerParam");
             var e = b.indexOf("?");
             d = b.indexOf("#");
             c ? b += (-1 == d ? "#" : "&") + a : (c = -1 == e ? "?" : "&", b = -1 == d ? b + (c + a) : b.substring(
                 0, d) + c + a + b.substring(d));
-            return b = b.replace(/&+_ga=/, "&_ga=")
+            b = b.replace(/&+_ga=/, "&_ga=");
+            return b = b.replace(/&+_gac=/, "&_gac=")
         },
         rd = function (a, b) {
             if (b && b.action)
@@ -1206,7 +1215,7 @@
                                     as: d
                                 };
                             d = [];
-                            d.push("_v=j62");
+                            d.push("_v=j63");
                             d.push("id=10");
                             for (var w in k) k.hasOwnProperty(w) && d.push(w + "=" + K(k[w]));
                             d.push("z=" + hd());
@@ -1249,7 +1258,7 @@
             b(Kd, a[Kd]);
             b(je, a[je]);
             b(hb, 1);
-            b(ib, "j62");
+            b(ib, "j63");
             c(Qb, Ma);
             c(oa, ua);
             c(dd, cd);
@@ -1294,20 +1303,41 @@
                 } else d = !1;
                 d && (c = void 0);
                 c && (a.data.set(xd, c), a.data.set(Q, c), c = Ca(P(a, la)), (c = Xd(a, c)) && a.data.set(I, c));
-                a.get(je) && !a.get(ce) && (c = Ca("_gac_" + Cc(P(a, Na)))) && 0 != c.length && (1 < c.length && J(
-                    73), c = c[0], c = c.split("."), "1" != c[0] || 3 != c.length ? J(74) : (a.data.set(fe,
-                    c[1]), a.data.set(ce, c[2])))
+                if (a.get(je) && !a.get(ce)) {
+                    c = {};
+                    d = [];
+                    e = M.cookie.split(";");
+                    for (var g = /^\s*_gac_(UA-\d+-\d+)=\s*(.+)\s*$/, ca = 0; ca < e.length; ca++) {
+                        var l = e[ca].match(g);
+                        l && 3 == l.length && d.push({
+                            ja: l[1],
+                            value: l[2]
+                        })
+                    }
+                    e = {};
+                    if (d && 0 != d.length) {
+                        for (g = 0; g < d.length; g++)(ca = d[g].value.split("."), "1" != ca[0] || 3 != ca.length) ?
+                            c && (c.na = !0) : ca[1] && (e[d[g].ja] ? c && (c.pa = !0) : e[d[g].ja] = [], e[d[g].ja]
+                                .push({
+                                    timestamp: ca[1],
+                                    qa: ca[2]
+                                }));
+                        Object.keys && 1 < Object.keys(e).length && c && (c.sa = !0)
+                    }
+                    d = e[P(a, Na)];
+                    le(c);
+                    d && 0 != d.length && (c = d[0], a.data.set(fe, c.timestamp), a.data.set(ce, c.qa))
+                }
             }
             if (a.get(Hd)) a: if (d = be("_ga", a.get(cc)))
                 if (a.get(bc))
                     if (c = d.indexOf("."), -1 == c) J(22);
                     else {
                         e = d.substring(0, c);
-                        var g = d.substring(c + 1);
+                        g = d.substring(c + 1);
                         c = g.indexOf(".");
                         d = g.substring(0, c);
-                        g = g.substring(c +
-                            1);
+                        g = g.substring(c + 1);
                         if ("1" == e) {
                             if (c = g, ke(c, d)) {
                                 J(23);
@@ -1321,7 +1351,8 @@
                                 J(53);
                                 break a
                             }
-                            e && (J(2), a.data.set(I, e))
+                            e &&
+                                (J(2), a.data.set(I, e))
                         } else {
                             J(22);
                             break a
@@ -1334,8 +1365,7 @@
             else J(21);
             b && (J(9), a.data.set(Q, K(b)));
             a.get(Q) || ((b = (b = O.gaGlobal && O.gaGlobal.vid) && -1 != b.search(jd) ? b : void 0) ? (J(17), a.data
-                .set(Q,
-                    b)) : (J(8), a.data.set(Q, ra())));
+                .set(Q, b)) : (J(8), a.data.set(Q, ra())));
             a.get(I) || (J(3), a.data.set(I, ra()));
             mc(a)
         },
@@ -1345,7 +1375,8 @@
                 d = M.location;
             a.set(lb, ya(a.get(ec), a.get(Kd)));
             if (d) {
-                var e = d.pathname || "";
+                var e =
+                    d.pathname || "";
                 "/" != e.charAt(0) && (J(31), e = "/" + e);
                 a.set(kb, d.protocol + "//" + d.hostname + e + d.search)
             }
@@ -1354,13 +1385,14 @@
             c = M.documentElement;
             var g = (e = M.body) && e.clientWidth && e.clientHeight,
                 ca = [];
-            c && c.clientWidth && c.clientHeight && ("CSS1Compat" === M.compatMode || !g) ? ca = [c.clientWidth,
-c.clientHeight] : g && (ca = [e.clientWidth, e.clientHeight]);
+            c && c.clientWidth && c.clientHeight && ("CSS1Compat" === M.compatMode || !g) ? ca = [c.clientWidth, c.clientHeight] :
+                g && (ca = [e.clientWidth, e.clientHeight]);
             c = 0 >= ca[0] || 0 >= ca[1] ? "" : ca.join("x");
             a.set(rb, c);
             a.set(tb, fc());
             a.set(ob, M.characterSet || M.charset);
-            a.set(sb, b && "function" === typeof b.javaEnabled && b.javaEnabled() || !1);
+            a.set(sb, b && "function" ===
+                typeof b.javaEnabled && b.javaEnabled() || !1);
             a.set(nb, (b && (b.language || b.browserLanguage) || "").toLowerCase());
             a.data.set(ce, be("gclid", !0));
             a.data.set(ie, be("gclsrc", !0));
@@ -1368,10 +1400,9 @@ c.clientHeight] : g && (ca = [e.clientWidth, e.clientHeight]);
             if (d && a.get(cc) && (b = M.location.hash)) {
                 b = b.split(/[?&#]+/);
                 d = [];
-                for (c = 0; c < b.length; ++c)(D(b[c], "utm_id") ||
-                    D(b[c], "utm_campaign") || D(b[c], "utm_source") || D(b[c], "utm_medium") || D(b[c],
-                        "utm_term") || D(b[c], "utm_content") || D(b[c], "gclid") || D(b[c], "dclid") || D(b[c],
-                        "gclsrc")) && d.push(b[c]);
+                for (c = 0; c < b.length; ++c)(D(b[c], "utm_id") || D(b[c], "utm_campaign") || D(b[c], "utm_source") ||
+                    D(b[c], "utm_medium") || D(b[c], "utm_term") || D(b[c], "utm_content") || D(b[c], "gclid") ||
+                    D(b[c], "dclid") || D(b[c], "gclsrc")) && d.push(b[c]);
                 0 < d.length && (b = "#" + d.join("&"), a.set(kb, a.get(kb) + b))
             }
         };
@@ -1707,9 +1738,9 @@ c.clientHeight] : g && (ca = [e.clientWidth, e.clientHeight]);
     N.da = function () {
         for (var a = N.getAll(), b = 0; b < a.length; b++) a[b].get(V)
     };
-    var le = N.N,
-        me = O[gb];
-    me && me.r ? le() : z(le);
+    var ne = N.N,
+        oe = O[gb];
+    oe && oe.r ? ne() : z(ne);
     z(function () {
         Z.D(["provide", "render", ua])
     });
