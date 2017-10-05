@@ -323,7 +323,7 @@
             return O.navigator.sendBeacon ? O.navigator.sendBeacon(a, b) ? (c(), !0) : !1 : !1
         },
         ge = function (a, b, c) {
-            1 <= 100 * Math.random() || G("?") || (a = ["t=error", "_e=" + a, "_v=j63", "sr=1"], b && a.push("_f=" +
+            1 <= 100 * Math.random() || G("?") || (a = ["t=error", "_e=" + a, "_v=j64", "sr=1"], b && a.push("_f=" +
                 b), c && a.push("_m=" + K(c.substring(0, 100))), a.push("aip=1"), a.push("z=" + hd()), wc(
                 oc() + "/collect", a.join("&"),
                 ua))
@@ -954,7 +954,7 @@
         var b = a.get(Q),
             c = a.get(I) || "";
         b = "_ga=2." + K(pa(c + b, 0) + "." + c + "-" + b);
-        if (c = a.get(ce)) {
+        if ((c = a.get(ce)) && a.get(je)) {
             var d = R(a, fe);
             1E3 * d + R(a, he) <= (new Date).getTime() ? (J(76), a = "") : (J(44), a = "&_gac=1." + K([pa(c, 0), d,
                 c].join(".")))
@@ -1008,17 +1008,21 @@
         rd = function (a, b) {
             if (b && b.action)
                 if ("get" == b.method.toLowerCase()) {
-                    a = a.target.get("linkerParam").split("=")[1];
-                    for (var c = b.childNodes || [], d = 0; d < c.length; d++)
-                        if ("_ga" == c[d].name) {
-                            c[d].setAttribute("value", a);
-                            return
-                        }
-                    c = M.createElement("input");
-                    c.setAttribute("type", "hidden");
-                    c.setAttribute("name", "_ga");
-                    c.setAttribute("value", a);
-                    b.appendChild(c)
+                    a = a.target.get("linkerParam").split("&");
+                    for (var c = 0; c < a.length; c++) {
+                        var d =
+                            a[c].split("="),
+                            e = d[1];
+                        d = d[0];
+                        for (var g = b.childNodes || [], ca = !1, l = 0; l < g.length; l++)
+                            if (g[l].name == d) {
+                                g[l].setAttribute("value", e);
+                                ca = !0;
+                                break
+                            }
+                        ca || (g = M.createElement("input"), g.setAttribute("type", "hidden"), g.setAttribute(
+                            "name", d), g.setAttribute("value", e), b.appendChild(g))
+                    }
                 } else "post" == b.method.toLowerCase() && (b.action = qd(a, b.action))
         };
     Dc.prototype.S = function (a, b, c) {
@@ -1215,7 +1219,7 @@
                                     as: d
                                 };
                             d = [];
-                            d.push("_v=j63");
+                            d.push("_v=j64");
                             d.push("id=10");
                             for (var w in k) k.hasOwnProperty(w) && d.push(w + "=" + K(k[w]));
                             d.push("z=" + hd());
@@ -1258,7 +1262,7 @@
             b(Kd, a[Kd]);
             b(je, a[je]);
             b(hb, 1);
-            b(ib, "j63");
+            b(ib, "j64");
             c(Qb, Ma);
             c(oa, ua);
             c(dd, cd);
@@ -1303,7 +1307,7 @@
                 } else d = !1;
                 d && (c = void 0);
                 c && (a.data.set(xd, c), a.data.set(Q, c), c = Ca(P(a, la)), (c = Xd(a, c)) && a.data.set(I, c));
-                if (a.get(je) && !a.get(ce)) {
+                if (a.get(je) && (c = a.get(ce), d = a.get(ie), !c || d && "aw.ds" != d)) {
                     c = {};
                     d = [];
                     e = M.cookie.split(";");
@@ -1317,8 +1321,8 @@
                     e = {};
                     if (d && 0 != d.length) {
                         for (g = 0; g < d.length; g++)(ca = d[g].value.split("."), "1" != ca[0] || 3 != ca.length) ?
-                            c && (c.na = !0) : ca[1] && (e[d[g].ja] ? c && (c.pa = !0) : e[d[g].ja] = [], e[d[g].ja]
-                                .push({
+                            c && (c.na = !0) : ca[1] && (e[d[g].ja] ?
+                                c && (c.pa = !0) : e[d[g].ja] = [], e[d[g].ja].push({
                                     timestamp: ca[1],
                                     qa: ca[2]
                                 }));
@@ -1346,13 +1350,13 @@
                         } else if ("2" == e) {
                             c = g.indexOf("-");
                             e = "";
-                            0 < c ? (e = g.substring(0, c), c = g.substring(c + 1)) : c = g.substring(1);
+                            0 < c ? (e = g.substring(0, c),
+                                c = g.substring(c + 1)) : c = g.substring(1);
                             if (ke(e + c, d)) {
                                 J(53);
                                 break a
                             }
-                            e &&
-                                (J(2), a.data.set(I, e))
+                            e && (J(2), a.data.set(I, e))
                         } else {
                             J(22);
                             break a
@@ -1375,8 +1379,7 @@
                 d = M.location;
             a.set(lb, ya(a.get(ec), a.get(Kd)));
             if (d) {
-                var e =
-                    d.pathname || "";
+                var e = d.pathname || "";
                 "/" != e.charAt(0) && (J(31), e = "/" + e);
                 a.set(kb, d.protocol + "//" + d.hostname + e + d.search)
             }
@@ -1389,10 +1392,10 @@
                 g && (ca = [e.clientWidth, e.clientHeight]);
             c = 0 >= ca[0] || 0 >= ca[1] ? "" : ca.join("x");
             a.set(rb, c);
-            a.set(tb, fc());
+            a.set(tb,
+                fc());
             a.set(ob, M.characterSet || M.charset);
-            a.set(sb, b && "function" ===
-                typeof b.javaEnabled && b.javaEnabled() || !1);
+            a.set(sb, b && "function" === typeof b.javaEnabled && b.javaEnabled() || !1);
             a.set(nb, (b && (b.language || b.browserLanguage) || "").toLowerCase());
             a.data.set(ce, be("gclid", !0));
             a.data.set(ie, be("gclsrc", !0));
@@ -1401,8 +1404,8 @@
                 b = b.split(/[?&#]+/);
                 d = [];
                 for (c = 0; c < b.length; ++c)(D(b[c], "utm_id") || D(b[c], "utm_campaign") || D(b[c], "utm_source") ||
-                    D(b[c], "utm_medium") || D(b[c], "utm_term") || D(b[c], "utm_content") || D(b[c], "gclid") ||
-                    D(b[c], "dclid") || D(b[c], "gclsrc")) && d.push(b[c]);
+                    D(b[c], "utm_medium") || D(b[c], "utm_term") || D(b[c], "utm_content") ||
+                    D(b[c], "gclid") || D(b[c], "dclid") || D(b[c], "gclsrc")) && d.push(b[c]);
                 0 < d.length && (b = "#" + d.join("&"), a.set(kb, a.get(kb) + b))
             }
         };
