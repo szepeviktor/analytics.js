@@ -18,7 +18,7 @@ wget -nv -t 1 -O "$ANALYTICS" "$URL"
 js-beautify --space-after-anon-function --good-stuff --wrap-line-length 120 \
     -o "$BEAUTY" "$ANALYTICS"
 
-VERSION="$(sed -n -e 's/^.*100 \* Math\.random.*"_v=\([[:alnum:]]\+\)".*$/\1/p' "$BEAUTY")"
+VERSION="$(sed -n -e 's/^\s*d\.push("_v=\([[:alnum:]]\+\)");$/\1/p' "$BEAUTY")"
 
 test -n "$VERSION"
 
